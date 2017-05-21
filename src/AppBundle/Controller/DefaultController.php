@@ -40,10 +40,7 @@ class DefaultController extends Controller
     public function mapAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-
-        $enderecos = $em->getRepository("AppBundle:Endereco")->getLatitudeLongitudeWithFilter();
-
-        $request = $request->request->get("items");
+        $enderecos = $em->getRepository("AppBundle:Endereco")->getLatitudeLongitudeWithFilter($request->request);
 
         return $this->render("default/map.html.twig", [
             "points" => $enderecos

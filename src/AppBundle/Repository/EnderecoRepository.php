@@ -2,6 +2,9 @@
 
 namespace AppBundle\Repository;
 
+use Symfony\Component\HttpFoundation as HttpFoundation;
+use AppBundle\Classes as Classes;
+
 /**
  * EnderecoReposity
  *
@@ -19,19 +22,26 @@ class EnderecoRepository extends \Doctrine\ORM\EntityRepository
 					->getResult();
 	}
 
-	public function getLatitudeLongitudeWithFilter()
+	public function getLatitudeLongitudeWithFilter(HttpFoundation\ParameterBag $data)
 	{
-		return $this->getEntityManager()
-					->createQueryBuilder()
-					->select(["e.latitude", "e.longitude"])
-					->from("AppBundle:Endereco", "e")
-					->innerJoin("AppBundle:Cliente", "c", "WITH", "c.idEndereco = e.id")
-					->innerJoin("AppBundle:Pedido", "p", "WITH", "p.idCliente = c.id")
-					->innerJoin("AppBundle:PedidoItem", "pi", "WITH", "pi.idPedido = p.id")
-					->innerJoin("AppBundle:Item", "i", "WITH", "pi.idItem = i.id")
-					->distinct()
-					->getQuery()
-					->getResult();
+		$queryBuilder = $this->getEntityManager()
+							->createQueryBuilder()
+							->select(["e.latitude", "e.longitude"])
+							->from("AppBundle:Endereco", "e")
+							->innerJoin("AppBundle:Cliente", "c", "WITH", "c.idEndereco = e.id")
+							->innerJoin("AppBundle:Pedido", "p", "WITH", "p.idCliente = c.id")
+							->innerJoin("AppBundle:PedidoItem", "pi", "WITH", "pi.idPedido = p.id")
+							->innerJoin("AppBundle:Item", "i", "WITH", "pi.idItem = i.id")
+							->distinct();
+
+		$queryBuilder = Classes\Filter::generateWhere($queryBuilder, $data);
+
+
+
+		
+		// return 
+		// 			->getQuery()
+		// 			->getResult();
 
 		// return $this->getEntityManager()
 		// 			->createQuery("
