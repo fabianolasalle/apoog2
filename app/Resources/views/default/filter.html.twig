@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container-fluid">
+    	<div class="row">
+    		<div class="col-md-12">
+    			<h2>Relatório de mapa de calor</h2>
+    		</div>
+    	</div>
+        <div class="row">
+            <div class="col-md-3">
+                <form method="POST" action="{{ path("map") }}">
+					<div class="form-group">
+						<label for="items">Produtos</label>
+						<select name="items[]" id="items" class="form-control" style="height: 120px" multiple>
+							{% for item in items %}
+								<option value="{{ item.id }}">({{ item.codigo }}) {{ item.descricao }}</option>
+							{% endfor %}
+						</select>
+					</div>
+
+					<button type="submit" class="btn btn-success">Pesquisar</button>
+				</form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

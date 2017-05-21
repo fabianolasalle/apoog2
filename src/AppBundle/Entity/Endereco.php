@@ -4,73 +4,95 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-
 /**
+ * Endereco
+ *
+ * @ORM\Table(name="endereco")
  * @ORM\Entity
  * @ORM\Entity(repositoryClass="AppBundle\Repository\EnderecoRepository")
  */
 class Endereco
 {
-	/**
-	 * @ORM\Column(type="integer", name="id", unique=true, nullable=false)
-	 * @ORM\Id
-	 */
-	private $id;
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="logradouro", type="string", length=90, nullable=true)
+     */
+    private $logradouro;
 
-	/**
-	 * @ORM\Column(type="string", name="logradouro", length=90, unique=false, nullable=false)
-	 */
-	private $logradouro;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cidade", type="string", length=50, nullable=true)
+     */
+    private $cidade;
 
-	/**
-	 * @ORM\Column(type="string", name="cidade", length=50, unique=false, nullable=false)
-	 */
-	private $cidade;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="numero", type="string", length=5, nullable=true)
+     */
+    private $numero;
 
-	/**
-	 * @ORM\Column(type="string", name="estado", length=30, unique=false, nullable=false)
-	 */
-	private $estado;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="complemento", type="string", length=10, nullable=true)
+     */
+    private $complemento;
 
-	/**
-	 * @ORM\Column(type="string", name="uf", length=2, unique=false, nullable=false)
-	 */
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="estado", type="string", length=30, nullable=true)
+     */
+    private $estado;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="uf", type="string", length=2, nullable=true)
+     */
     private $uf;
 
-	/**
-	 * @ORM\Column(type="string", name="bairro", length=40, unique=false, nullable=false)
-	 */
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="bairro", type="string", length=40, nullable=true)
+     */
     private $bairro;
 
-	/**
-	 * @ORM\Column(type="string", name="cep", length=9, unique=false, nullable=false)
-	 */
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cep", type="string", length=9, nullable=true)
+     */
     private $cep;
 
     /**
-     * @ORM\Column(type="decimal", name="latitude", nullable=false, scale=0, precision=6)
+     * @var float
+     *
+     * @ORM\Column(name="latitude", type="float", precision=10, scale=0, nullable=true)
      */
-    protected $latitude;
-    
+    private $latitude;
+
     /**
-     * @ORM\Column(type="decimal", name="longitude", nullable=false, scale=0, precision=6)
+     * @var float
+     *
+     * @ORM\Column(name="longitude", type="float", precision=10, scale=0, nullable=true)
      */
     private $longitude;
 
-    /**
-     * Set id
-     *
-     * @param integer $id
-     *
-     * @return Endereco
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
 
-        return $this;
-    }
 
     /**
      * Get id
@@ -128,6 +150,54 @@ class Endereco
     public function getCidade()
     {
         return $this->cidade;
+    }
+
+    /**
+     * Set numero
+     *
+     * @param string $numero
+     *
+     * @return Endereco
+     */
+    public function setNumero($numero)
+    {
+        $this->numero = $numero;
+
+        return $this;
+    }
+
+    /**
+     * Get numero
+     *
+     * @return string
+     */
+    public function getNumero()
+    {
+        return $this->numero;
+    }
+
+    /**
+     * Set complemento
+     *
+     * @param string $complemento
+     *
+     * @return Endereco
+     */
+    public function setComplemento($complemento)
+    {
+        $this->complemento = $complemento;
+
+        return $this;
+    }
+
+    /**
+     * Get complemento
+     *
+     * @return string
+     */
+    public function getComplemento()
+    {
+        return $this->complemento;
     }
 
     /**
@@ -229,7 +299,7 @@ class Endereco
     /**
      * Set latitude
      *
-     * @param string $latitude
+     * @param float $latitude
      *
      * @return Endereco
      */
@@ -243,7 +313,7 @@ class Endereco
     /**
      * Get latitude
      *
-     * @return string
+     * @return float
      */
     public function getLatitude()
     {
@@ -253,7 +323,7 @@ class Endereco
     /**
      * Set longitude
      *
-     * @param string $longitude
+     * @param float $longitude
      *
      * @return Endereco
      */
@@ -267,7 +337,7 @@ class Endereco
     /**
      * Get longitude
      *
-     * @return string
+     * @return float
      */
     public function getLongitude()
     {

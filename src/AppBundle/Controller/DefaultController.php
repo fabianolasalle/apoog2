@@ -21,13 +21,29 @@ class DefaultController extends Controller
 
 
     /**
+     * @Route("/filter", name="filter")
+     */
+    public function filterAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $items = $em->getRepository("AppBundle:Item")->getToSelect();
+
+        return $this->render("default/filter.html.twig", [
+            "items" => $items
+        ]);
+    }
+
+    /**
      * @Route("/map", name="map")
      */
     public function mapAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $enderecos = $em->getRepository("AppBundle:Endereco")->getLatitudeLongitude();
+        $enderecos = $em->getRepository("AppBundle:Endereco")->getLatitudeLongitudeWithFilter();
+
+        $request = $request->request->get("items");
 
         return $this->render("default/map.html.twig", [
             "points" => $enderecos

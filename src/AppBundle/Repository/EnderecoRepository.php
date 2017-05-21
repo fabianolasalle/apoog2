@@ -13,7 +13,37 @@ class EnderecoRepository extends \Doctrine\ORM\EntityRepository
 	public function getLatitudeLongitude()
 	{
 		return $this->getEntityManager()
-					->createQuery("SELECT e.latitude, e.longitude FROM AppBundle:Endereco e")
+					->createQuery("
+						SELECT e.latitude, e.longitude FROM AppBundle:Endereco e
+					")
 					->getResult();
 	}
+
+	public function getLatitudeLongitudeWithFilter()
+	{
+		return $this->getEntityManager()
+					->createQueryBuilder()
+					->select(["e.latitude", "e.longitude"])
+					->from("AppBundle:Endereco", "e")
+					->innerJoin("AppBundle:Cliente", "c", "WITH", "c.idEndereco = e.id")
+					->innerJoin("AppBundle:Pedido", "p", "WITH", "p.idCliente = c.id")
+					->innerJoin("AppBundle:PedidoItem", "pi", "WITH", "pi.idPedido = p.id")
+					->innerJoin("AppBundle:Item", "i", "WITH", "pi.idItem = i.id")
+					->distinct()
+					->getQuery()
+					->getResult();
+
+		// return $this->getEntityManager()
+		// 			->createQuery("
+		// 				SELECT distinct e.latitude, e.longitude FROM AppBundle:Cliente c
+		// 				join AppBundle:Endereco e with e.id = c.idEndereco
+		// 			")
+		// 			->getResult();
+
+	}
 }
+
+// -- inner join AppBundle:Pedido as p on c.id = p.id_cliente
+// 						-- inner join AppBundle:PedidoItem as pi on pi.id_pedido = p.id
+// 						-- inner join AppBundle:Item i as on i.id = pi.id_item
+// 						-- where i.id in (1,2,3);

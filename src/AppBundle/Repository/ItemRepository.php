@@ -10,4 +10,10 @@ namespace AppBundle\Repository;
  */
 class ItemRepository extends \Doctrine\ORM\EntityRepository
 {
+	public function getToSelect()
+	{
+		return $this->getEntityManager()
+					->createQuery("SELECT item.id, item.codigo, item.descricao FROM AppBundle:Item item")
+					->getResult();
+	}
 }
