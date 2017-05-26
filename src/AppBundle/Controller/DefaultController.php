@@ -5,6 +5,8 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Classes\FilterManager;
+use AppBundle\Classes\Filter;
 
 class DefaultController extends Controller
 {
@@ -40,10 +42,27 @@ class DefaultController extends Controller
     public function mapAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $enderecos = $em->getRepository("AppBundle:Endereco")->getLatitudeLongitudeWithFilter($request->request);
+        
+        $filterManager = $this->getFilterManager($request);
+
+        $enderecoRepository = $em->getRepository("AppBundle:Endereco");
+        $enderecoRepository->filterManager = $filterManager;
+        $enderecos = $enderecoRepository->getLatitudeLongitudeWithFilter();
 
         return $this->render("default/map.html.twig", [
             "points" => $enderecos
         ]);
+    }
+
+    private function getFilterManager(Request $request) : FilterManager
+    {
+        $filterManager = new FilterManager();
+        foreach ($request->request as $field => $value) {
+            if ($field == "items") {
+                $filterManager->addFilter(new Filter("item", "i.id in", $value));
+            }
+        }
+
+        return $filterManager;
     }
 }

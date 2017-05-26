@@ -13,6 +13,8 @@ use AppBundle\Classes as Classes;
  */
 class EnderecoRepository extends \Doctrine\ORM\EntityRepository
 {
+	public $filterManager;
+
 	public function getLatitudeLongitude()
 	{
 		return $this->getEntityManager()
@@ -22,7 +24,7 @@ class EnderecoRepository extends \Doctrine\ORM\EntityRepository
 					->getResult();
 	}
 
-	public function getLatitudeLongitudeWithFilter(HttpFoundation\ParameterBag $data)
+	public function getLatitudeLongitudeWithFilter()
 	{
 		$queryBuilder = $this->getEntityManager()
 							->createQueryBuilder()
@@ -34,7 +36,15 @@ class EnderecoRepository extends \Doctrine\ORM\EntityRepository
 							->innerJoin("AppBundle:Item", "i", "WITH", "pi.idItem = i.id")
 							->distinct();
 
-		$queryBuilder = Classes\Filter::generateWhere($queryBuilder, $data);
+		if (!empty($this->filterManager)) {
+			$queryBuilder = $this->filterManager->applyFilters($queryBuilder);
+		}
+
+		return $queryBuilder->getQuery()
+							->getResult();
+
+
+		// $queryBuilder = Classes\Filter::generateWhere($queryBuilder, $data);
 
 
 
