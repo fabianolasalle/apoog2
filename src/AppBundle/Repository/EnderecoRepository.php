@@ -47,26 +47,6 @@ class EnderecoRepository extends \Doctrine\ORM\EntityRepository
 		$enderecos = $queryBuilder->getQuery()
 									->getResult();
 
-		// if (!empty($extraColumn)){
-  //           usort($enderecos, function($a, $b){
-  //               if ($a["weight"] == $b["weight"]){
-  //                   return 0;
-  //               }
-
-  //               return ($a["weight"] > $b["weight"]) ? -1 : 1;
-  //           });
-
-
-  //           $higherWeight = $enderecos[0]["weight"];
-
-  //           foreach ($enderecos as &$endereco){
-  //               $endereco["weight"] = ($endereco["weight"] / $higherWeight);
-  //               if ($endereco["weight"] < 0.5){
-		// 			$endereco["weight"] = 0.5;
-		// 		}
-  //           }
-  //       }
-
         return $enderecos;
 	}
 }
