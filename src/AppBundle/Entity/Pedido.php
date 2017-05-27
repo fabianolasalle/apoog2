@@ -50,6 +50,14 @@ class Pedido
     private $idUsuario;
 
     /**
+     * @var float
+     *
+     * @ORM\Column(name="total", type="float", nullable=true)
+     */
+    private $total;
+
+
+    /**
      * @var \Cliente
      *
      * @ORM\ManyToOne(targetEntity="Cliente")

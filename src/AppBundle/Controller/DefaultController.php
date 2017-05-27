@@ -44,10 +44,18 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getManager();
         
         $filterManager = $this->getFilterManager($request);
+        $weight = $request->request->get("weight");
+
+        $weightColumn = null;
+        if ($weight == "tempo") {
+            $weightColumn = "p.dataHoraEntrega - p.dataHoraPedido";
+        } else if ($weight == "valor") {
+            $weightColumn = "p.total";
+        }
 
         $enderecoRepository = $em->getRepository("AppBundle:Endereco");
         $enderecoRepository->filterManager = $filterManager;
-        $enderecos = $enderecoRepository->getLatitudeLongitudeWithFilter();
+        $enderecos = $enderecoRepository->getLatitudeLongitudeWithFilter($weightColumn);
 
         return $this->render("default/map.html.twig", [
             "points" => $enderecos

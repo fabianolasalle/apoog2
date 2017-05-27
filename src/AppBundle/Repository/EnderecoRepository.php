@@ -24,7 +24,7 @@ class EnderecoRepository extends \Doctrine\ORM\EntityRepository
 					->getResult();
 	}
 
-	public function getLatitudeLongitudeWithFilter()
+	public function getLatitudeLongitudeWithFilter($extraColumn = null)
 	{
 		$queryBuilder = $this->getEntityManager()
 							->createQueryBuilder()
@@ -40,30 +40,33 @@ class EnderecoRepository extends \Doctrine\ORM\EntityRepository
 			$queryBuilder = $this->filterManager->applyFilters($queryBuilder);
 		}
 
-		return $queryBuilder->getQuery()
-							->getResult();
-
-
-		// $queryBuilder = Classes\Filter::generateWhere($queryBuilder, $data);
-
-
-
+		if (!empty($extraColumn)) {
+			$queryBuilder->addSelect("{$extraColumn} as weight");
+		}
 		
-		// return 
-		// 			->getQuery()
-		// 			->getResult();
+		$enderecos = $queryBuilder->getQuery()
+									->getResult();
 
-		// return $this->getEntityManager()
-		// 			->createQuery("
-		// 				SELECT distinct e.latitude, e.longitude FROM AppBundle:Cliente c
-		// 				join AppBundle:Endereco e with e.id = c.idEndereco
-		// 			")
-		// 			->getResult();
+		// if (!empty($extraColumn)){
+  //           usort($enderecos, function($a, $b){
+  //               if ($a["weight"] == $b["weight"]){
+  //                   return 0;
+  //               }
 
+  //               return ($a["weight"] > $b["weight"]) ? -1 : 1;
+  //           });
+
+
+  //           $higherWeight = $enderecos[0]["weight"];
+
+  //           foreach ($enderecos as &$endereco){
+  //               $endereco["weight"] = ($endereco["weight"] / $higherWeight);
+  //               if ($endereco["weight"] < 0.5){
+		// 			$endereco["weight"] = 0.5;
+		// 		}
+  //           }
+  //       }
+
+        return $enderecos;
 	}
 }
-
-// -- inner join AppBundle:Pedido as p on c.id = p.id_cliente
-// 						-- inner join AppBundle:PedidoItem as pi on pi.id_pedido = p.id
-// 						-- inner join AppBundle:Item i as on i.id = pi.id_item
-// 						-- where i.id in (1,2,3);

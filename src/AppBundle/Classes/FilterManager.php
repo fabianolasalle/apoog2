@@ -6,7 +6,7 @@ use Doctrine\ORM as ORM;
 
 class FilterManager
 {
-	private $filters;
+	private $filters = array();
 
 	public function __construct($filters = array())
 	{
