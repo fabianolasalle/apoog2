@@ -49,7 +49,7 @@ class DefaultController extends Controller
         $weightColumn = null;
         if ($weight == "tempo") {
             $weightColumn = "p.dataHoraEntrega - p.dataHoraPedido";
-        } else if ($weight == "valor") {
+        } elseif ($weight == "valor") {
             $weightColumn = "p.total";
         }
 

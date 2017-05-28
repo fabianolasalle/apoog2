@@ -20,7 +20,7 @@ class Pedido
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
-
+    
     /**
      * @var string
      *
