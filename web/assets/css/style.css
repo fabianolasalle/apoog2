@@ -18,6 +18,10 @@
 	padding: 2px 12px;
 }
 
+.map-button.active{
+    box-shadow: 0 0 9px rgba(0,0,0,.4) inset;
+}
+
 .map-button:hover{
 	background-color: #CCCCCC;
 }

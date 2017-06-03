@@ -49,13 +49,21 @@ class DefaultController extends Controller
         $weightColumn = null;
         if ($weight == "tempo") {
             $weightColumn = "p.dataHoraEntrega - p.dataHoraPedido";
-        } elseif ($weight == "valor") {
+        } elseif ($weight == "total") {
             $weightColumn = "p.total";
         }
 
         $enderecoRepository = $em->getRepository("AppBundle:Endereco");
         $enderecoRepository->filterManager = $filterManager;
+
         $enderecos = $enderecoRepository->getLatitudeLongitudeWithFilter($weightColumn);
+
+        // Trata os endereços
+        foreach ($enderecos as &$endereco) {
+            $dateInterval = $endereco["dataHoraEntrega"]->diff($endereco["dataHoraPedido"]);
+            $endereco["tempoEntrega"] = $dateInterval->format("%H:%i:%s");
+            $endereco["infoWindow"] = $this->get("twig")->render("default/infowindow.html.twig", array("data" => $endereco));
+        }
 
         return $this->render("default/map.html.twig", [
             "points" => $enderecos

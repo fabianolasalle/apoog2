@@ -28,7 +28,7 @@ class EnderecoRepository extends \Doctrine\ORM\EntityRepository
     {
         $queryBuilder = $this->getEntityManager()
                             ->createQueryBuilder()
-                            ->select(["e.latitude", "e.longitude"])
+                            ->select(["e.latitude", "e.longitude", "c.dataNascimento", "c.nome", "p.total", "p.dataHoraPedido", "p.dataHoraEntrega", "p.id"])
                             ->from("AppBundle:Endereco", "e")
                             ->innerJoin("AppBundle:Cliente", "c", "WITH", "c.idEndereco = e.id")
                             ->innerJoin("AppBundle:Pedido", "p", "WITH", "p.idCliente = c.id")
@@ -44,9 +44,9 @@ class EnderecoRepository extends \Doctrine\ORM\EntityRepository
             $queryBuilder->addSelect("{$extraColumn} as weight");
         }
         
+        
         $enderecos = $queryBuilder->getQuery()
                                     ->getResult();
-
         return $enderecos;
     }
 }
