@@ -13,6 +13,9 @@
 	text-align: center;
 	margin-top: 10px;
 	margin-right: 12px;
+	width: auto;
+	position: absolute;
+	padding: 2px 12px;
 }
 
 .map-button:hover{
@@ -20,9 +23,11 @@
 }
 
 .toggle-marker{
-	width: auto;
-	position: absolute;
 	right: 0;
 	top: 0;
-	padding: 2px 12px;
+}
+
+.toggle-heatmap {
+	right: 105px;
+	top: 0;
 }

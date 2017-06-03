@@ -4,13 +4,17 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-            	<div class="map-wrapper">
-            		<div id="map" style="height: 100vh;"></div>
+                <div class="map-wrapper">
+                    <div id="map" style="height: 100vh;"></div>
 
-        		    <button class="map-button toggle-marker">
-				    	<span>Exibir Markers</span>
-				    </button>
-            	</div>
+                    <button class="map-button toggle-marker">
+                        <span>Exibir Markers</span>
+                    </button>
+
+                    <button class="map-button toggle-heatmap active">
+                        <span>Exibir mapa de calor</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -19,71 +23,103 @@
 {% endblock %}
 
 {% block javascripts %}
-	<script>
-		var map;
-		var coordinates = {{ points|json_encode|raw }};
-		var heatmap;
+    <script>
+        var map;
+        var coordinates = {{ points|json_encode|raw }};
+        var heatmap;
+        var makers = [];
 
-		function initMap() {
-	        map = new google.maps.Map(document.getElementById('map'), {
-		    	center: {lat: -27.6102281, lng: -48.6250075},
-				zoom: 11
-			});
-
-	        google.maps.event.addListener(map, 'idle', function(){
-	        	if (heatmap){
-	        		heatmap.setMap(null);	
-	        	}
-	        	
-			 	heatmap = new google.maps.visualization.HeatmapLayer({
-					data: getPoints(),
-					radius: 20,
-					map: map
-		        });
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: {lat: -27.6102281, lng: -48.6250075},
+                zoom: 11
             });
-		}
 
-		function getPoints() {
-			var googleLatLong = [];
-			var googleLatLongPrepare = [];
-			$.each(coordinates, function(index, value){
-				var googleLatLngPoint = new google.maps.LatLng(value.latitude, value.longitude);
+            google.maps.event.addListener(map, 'idle', function(){
+                if ($(".toggle-heatmap").hasClass("active")) {
+                    if (heatmap){
+                        heatmap.setMap(null);   
+                    }
+                    
+                    heatmap = new google.maps.visualization.HeatmapLayer({
+                        data: getPoints(),
+                        radius: 20,
+                        map: map
+                    });
+                };
+            });
+        }
 
-				if (map.getBounds().contains(googleLatLngPoint)){
-					if (value.weight === undefined){
-						value.weight = 1;
-					}
-					googleLatLongPrepare.push({location: googleLatLngPoint, weight: value.weight});
-				}
+        function getPoints() {
+            var googleLatLong = [];
+            var googleLatLongPrepare = [];
+            markers = [];
+            $.each(coordinates, function(index, value){
+                var googleLatLngPoint = new google.maps.LatLng(value.latitude, value.longitude);
 
-				// Caso não seja dinâmico, descomentar esta linha e comentar o uso do googleLatLngPrepare
-				// googleLatLong.push({location: googleLatLngPoint, weight: value.weight});	
-			});
+                markers.push(new google.maps.Marker({
+                    position: {lat: value.latitude, lng: value.longitude},
+                    map: null,
+                    title: 'Hi!'
+                }));
 
-			googleLatLongPrepare.sort(function(a,b){
-				if (a.weight === b.weight) {
-					return 0;
-				}
-				return (parseInt(a.weight) > parseInt(b.weight)) ? -1 : 1;
-			});
+                if (map.getBounds().contains(googleLatLngPoint)){
+                    if (value.weight === undefined){
+                        value.weight = 1;
+                    }
+                    googleLatLongPrepare.push({location: googleLatLngPoint, weight: value.weight});
+                }
 
-			var higher = googleLatLongPrepare[0].weight;
+                // Caso não seja dinâmico, descomentar esta linha e comentar o uso do googleLatLngPrepare
+                // googleLatLong.push({location: googleLatLngPoint, weight: value.weight}); 
+            });
 
-			$.each(googleLatLongPrepare, function(index, value){
-				value.weight = value.weight / higher;
-				if (value.weight < 0.5){
-					value.weight = 0.5;
-				}
-				googleLatLong.push(value);
-			});
-			
-			return googleLatLong;
-		}
+            googleLatLongPrepare.sort(function(a,b){
+                if (a.weight === b.weight) {
+                    return 0;
+                }
+                return (parseInt(a.weight) > parseInt(b.weight)) ? -1 : 1;
+            });
 
-		$(".toggle-marker").on("click", function(){
-			console.log("123");
-			return false;
-		});
-	</script>
+            var higher = googleLatLongPrepare[0].weight;
+
+            $.each(googleLatLongPrepare, function(index, value){
+                value.weight = value.weight / higher;
+                if (value.weight < 0.5){
+                    value.weight = 0.5;
+                }
+                googleLatLong.push(value);
+            });
+            
+            return googleLatLong;
+        }
+
+        $(".toggle-marker").on("click", function(){
+            if (!$(this).hasClass('active')){
+                if (markers.length > 0){
+                    $.each(markers, function(index, marker){
+                        marker.setMap(map);
+                    });
+                }
+                $(this).addClass('active');
+            } else {
+                $(this).removeClass('active');
+                $.each(markers, function(index, marker){
+                    marker.setMap(null);
+                });
+            }
+            return false;
+        });
+
+        $(".toggle-heatmap").on("click", function(){
+            if (!$(this).hasClass('active')) {
+                heatmap.setMap(map);
+                $(this).addClass("active");
+            } else {
+                heatmap.setMap(null);
+                $(this).removeClass("active");
+            }
+        });
+    </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDNSeZrDCKuKexdxUnjM6RB5nbENawL0G0&callback=initMap&libraries=visualization" async defer></script>
 {% endblock %}
