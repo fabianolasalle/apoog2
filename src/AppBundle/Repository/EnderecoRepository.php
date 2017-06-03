@@ -43,8 +43,6 @@ class EnderecoRepository extends \Doctrine\ORM\EntityRepository
         if (!empty($extraColumn)) {
             $queryBuilder->addSelect("{$extraColumn} as weight");
         }
-
-        echo $queryBuilder->getDQL();
         
         $enderecos = $queryBuilder->getQuery()
                                     ->getResult();
