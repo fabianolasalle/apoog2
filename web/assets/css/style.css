@@ -1,0 +1,28 @@
+.map-wrapper{
+	position: relative;
+}
+
+.map-button{
+	background-color: #fff;
+	border-radius: 2px;
+	border: none;
+	font-size: 11px;
+	line-height: 25px;
+	box-shadow: 0 1px 1px rgba(0,0,0,.3);
+	cursor: pointer;
+	text-align: center;
+	margin-top: 10px;
+	margin-right: 12px;
+}
+
+.map-button:hover{
+	background-color: #CCCCCC;
+}
+
+.toggle-marker{
+	width: auto;
+	position: absolute;
+	right: 0;
+	top: 0;
+	padding: 2px 12px;
+}
