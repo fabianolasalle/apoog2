@@ -69,6 +69,14 @@ class DefaultController extends Controller
             if ($field == "items") {
                 $filterManager->addFilter(new Filter("item", "i.id in", $value));
             }
+
+            if ($field == "periodoInicio") {
+                $filterManager->addFilter(new Filter("periodoinico", "p.dataHoraEntrega >=", $value));
+            }
+
+            if ($field == "periodoFim") {
+                $filterManager->addFilter(new Filter("periodofim", "p.dataHoraEntrega <=", $value));
+            }
         }
 
         return $filterManager;

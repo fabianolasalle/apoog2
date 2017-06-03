@@ -7,9 +7,25 @@
     			<h2>Relatório de mapa de calor</h2>
     		</div>
     	</div>
-        <div class="row">
-            <div class="col-md-3">
-                <form method="POST" action="{{ path("map") }}">
+    	<form method="POST" action="{{ path("map") }}">
+			<div class="row">
+				<div class="col-md-2">
+					<div class="form-group">
+						<label for="dataInicio">Período Início: </label>
+						<input type="text" name="periodoInicio" class="datetimepicker form-control">
+					</div>
+				</div>
+
+				<div class="col-md-2">
+					<div class="form-group">
+						<label for="dataInicio">Período Fim: </label>
+						<input type="text" name="periodoFim" class="datetimepicker form-control">
+					</div>
+				</div>
+			</div>
+
+	        <div class="row">
+	            <div class="col-md-3">
 					<div class="form-group">
 						<label for="items">Produtos</label>
 						<select name="items[]" id="items" class="form-control" style="height: 120px" multiple>
@@ -18,7 +34,11 @@
 							{% endfor %}
 						</select>
 					</div>
+				</div>
+			</div>
 
+			<div class="row">
+				<div class="col-md-3">
 					<div class="form-group">
 						<label for="weight">Ponderar pontos por:</label>
 						<select name="weight" id="weight" class="form-control">
@@ -27,11 +47,22 @@
 							<option value="total">Valor de pedido</option>
 						</select>
 					</div>
+				</div>
+			</div>
 
-
+			<div class="row">
+				<div class="col-md-3">
 					<button type="submit" class="btn btn-success">Pesquisar</button>
-				</form>
-            </div>
-        </div>
+				</div>
+			</div>
+        </form>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+	<script>
+		$('.datetimepicker').datetimepicker({
+			format: 'd/m/Y H:i'
+		}).setLocale('pt-BR');
+	</script>	
 {% endblock %}

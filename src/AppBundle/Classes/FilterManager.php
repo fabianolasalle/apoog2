@@ -12,7 +12,7 @@ class FilterManager
     {
         foreach ($filters as $filter) {
             if (!$filter instanceof Filter) {
-                throw new UnexpectedValueException("Filter is not a AppBundle\Classes\Filter class");
+                throw new \UnexpectedValueException("Filter is not a AppBundle\Classes\Filter class");
             }
 
             $this->filters[$filter->name] = $filter;
@@ -22,7 +22,7 @@ class FilterManager
     public function addFilter(Filter $filter)
     {
         if (isset($this->filters[$filter->name])) {
-            throw new InvalidArgumentException("{$filter->name} already exists. Use setFilter to overwrite");
+            throw new \InvalidArgumentException("{$filter->name} already exists. Use setFilter to overwrite");
         }
         $this->filters[$filter->name] = $filter;
     }
@@ -35,10 +35,13 @@ class FilterManager
 
     public function applyFilters($query)
     {
+        $where = [];
         foreach ($this->filters as $filter) {
-            $query->where("{$filter->condition} (:filter{$filter->name})");
+            $where[] = "{$filter->condition} (:filter{$filter->name})";
             $query->setParameter("filter{$filter->name}", $filter->value);
         }
+
+        $query->where(implode(" AND ", $where));
 
         return $query;
     }

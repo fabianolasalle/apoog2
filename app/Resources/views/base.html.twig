@@ -6,13 +6,15 @@
         {% block stylesheets %}{% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
         <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/jquery.datetimepicker.min.css') }}">
     </head>
     <body>
         {% block body %}{% endblock %}
 
         <script src="{{ asset('assets/js/jquery-3.2.1.min.js') }}"></script>
         <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
-        
+        <script src="{{ asset('assets/js/jquery.datetimepicker.full.min.js') }}"></script>
+
         {% block javascripts %}{% endblock %}
     </body>
 </html>
