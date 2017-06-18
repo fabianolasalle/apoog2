@@ -46,7 +46,8 @@ class EnderecoRepository extends \Doctrine\ORM\EntityRepository
         }
 
 
-        // echo $queryBuilder->getDQL();
+        // echo $queryBuilder->getQuery()->getSql();
+        // die;
 
         $enderecos = $queryBuilder->getQuery()
                                     ->getResult();

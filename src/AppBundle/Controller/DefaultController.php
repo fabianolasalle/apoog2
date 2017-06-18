@@ -42,6 +42,8 @@ class DefaultController extends Controller
     public function mapAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+        $em->getConfiguration()->addCustomNumericFunction('FLOOR', 'AppBundle\Query\MysqlFloor');
+        
         
         $filterManager = $this->getFilterManager($request);
         $weight = $request->request->get("weight");
@@ -90,6 +92,14 @@ class DefaultController extends Controller
 
             if ($field == "periodoFim") {
                 $filterManager->addFilter(new Filter("periodofim", "p.dataHoraEntrega <=", $value, "Fim do período de entrega"));
+            }
+
+            if ($field == "idadeInicio" && !empty($value)) {
+                $filterManager->addFilter(new Filter("idadeInicio", "FLOOR(DATE_DIFF(CURRENT_DATE(), c.dataNascimento) / 365) >=", $value, "Início intervalo de idade"));
+            }
+
+            if ($field == "idadeFim"  && !empty($value)) {
+                $filterManager->addFilter(new Filter("idadeFim", "FLOOR(DATE_DIFF(CURRENT_DATE(), c.dataNascimento) / 365) <=", $value, "Fim intervalo de idade"));
             }
         }
 
