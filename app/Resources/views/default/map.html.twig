@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="container-fluid">
+    <div class="container-fluid" style="padding: 0">
         <div class="row">
             <div class="col-md-12">
                 <div class="map-wrapper">
@@ -19,8 +19,28 @@
         </div>
     </div>
 
+    <div class="floating-message filter-data">
+        <table class="table table-stripped table-condensed">
+            <thead>
+                <tr>
+                    <th>Filtro</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for filt in filters %}
+                    <tr>
+                        <td>{{ filt.humanName }}</td>
+                        <td>{{ filt.value }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
     {% if hasData == false %}
-        <div class="floating-message">
+        <div class="floating-message no-data-message">
             <p class="alert alert-warning text-center">
                 <span class="glyphicon glyphicon-alert"></span> 
                 Não foram encontrados pontos para a busca realizada.

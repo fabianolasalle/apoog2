@@ -69,10 +69,10 @@ class DefaultController extends Controller
             $hasData = true;
         }
 
-
         return $this->render("default/map.html.twig", [
             "points" => $enderecos,
-            "hasData" => $hasData
+            "hasData" => $hasData,
+            "filters"   => $filterManager->getFilters()
         ]);
     }
 
@@ -81,15 +81,15 @@ class DefaultController extends Controller
         $filterManager = new FilterManager();
         foreach ($request->request as $field => $value) {
             if ($field == "items") {
-                $filterManager->addFilter(new Filter("item", "i.id in", $value));
+                $filterManager->addFilter(new Filter("item", "i.id in", $value, "Itens"));
             }
 
             if ($field == "periodoInicio") {
-                $filterManager->addFilter(new Filter("periodoinico", "p.dataHoraEntrega >=", $value));
+                $filterManager->addFilter(new Filter("periodoinico", "p.dataHoraEntrega >=", $value, "Início do período de entrega"));
             }
 
             if ($field == "periodoFim") {
-                $filterManager->addFilter(new Filter("periodofim", "p.dataHoraEntrega <=", $value));
+                $filterManager->addFilter(new Filter("periodofim", "p.dataHoraEntrega <=", $value, "Fim do período de entrega"));
             }
         }
 
