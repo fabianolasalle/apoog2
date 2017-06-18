@@ -28,7 +28,7 @@ class EnderecoRepository extends \Doctrine\ORM\EntityRepository
     {
         $queryBuilder = $this->getEntityManager()
                             ->createQueryBuilder()
-                            ->select(["e.latitude", "e.longitude", "c.dataNascimento", "c.nome", "p.total", "p.dataHoraPedido", "p.dataHoraEntrega", "p.id"])
+                            ->select(["e.latitude", "e.longitude", "c.dataNascimento", "c.nome", "p.total", "p.dataHoraPedido", "p.dataHoraEntrega", "p.id", "FLOOR(DATE_DIFF(CURRENT_DATE(), c.dataNascimento) / 365) as idade"])
                             ->from("AppBundle:Endereco", "e")
                             ->innerJoin("AppBundle:Cliente", "c", "WITH", "c.idEndereco = e.id")
                             ->innerJoin("AppBundle:Pedido", "p", "WITH", "p.idCliente = c.id")
@@ -51,9 +51,6 @@ class EnderecoRepository extends \Doctrine\ORM\EntityRepository
 
         $enderecos = $queryBuilder->getQuery()
                                     ->getResult();
-
-        // var_dump($enderecos);
-        // die;
 
         return $enderecos;
     }
