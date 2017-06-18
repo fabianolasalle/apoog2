@@ -42,11 +42,12 @@ class EnderecoRepository extends \Doctrine\ORM\EntityRepository
 
         if (!empty($extraColumn)) {
             $queryBuilder->addSelect("{$extraColumn} as weight");
+            $queryBuilder->orderBy("weight", "DESC");
         }
-        
-        
+
         $enderecos = $queryBuilder->getQuery()
                                     ->getResult();
+
         return $enderecos;
     }
 }

@@ -9,6 +9,10 @@
             <td>{{ data.nome }}</td>
         </tr>
         <tr>
+            <th>Data pedido</th>
+            <td>{{ data.dataHoraEntrega.format('d/m/Y H:i:s') }}</td>
+        </tr>
+        <tr>
             <th>Tempo de entrega</th>
             <td>{{ data.tempoEntrega }}</td>
         </tr>

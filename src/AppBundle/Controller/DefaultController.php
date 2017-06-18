@@ -61,7 +61,7 @@ class DefaultController extends Controller
         // Trata os endereços
         foreach ($enderecos as &$endereco) {
             $dateInterval = $endereco["dataHoraEntrega"]->diff($endereco["dataHoraPedido"]);
-            $endereco["tempoEntrega"] = $dateInterval->format("%H:%i:%s");
+            $endereco["tempoEntrega"] = $dateInterval->format("%H:%I:%S");
             $endereco["infoWindow"] = $this->get("twig")->render("default/infowindow.html.twig", array("data" => $endereco));
         }
 
