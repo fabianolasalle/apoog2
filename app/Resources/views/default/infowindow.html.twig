@@ -2,15 +2,24 @@
     <table class="table table-bordered table-condensed">
         <tr>
             <th>Pedido</th>
-            <td>#{{ data.id }}</td>
+            <td><a href="#" title="Ver detalhes do pedido">#{{ data.id }} <span class="glyphicon glyphicon-list-alt"></span></a></td>
         </tr>
         <tr>
             <th>Nome</th>
-            <td>{{ data.nome }}</td>
+            <td><a href="#" title="Ver detalhes do pedido">{{ data.nome }} <span class="glyphicon glyphicon-list-alt"></span></a></td>
         </tr>
         <tr>
+            <th>Data pedido</th>
+            <td>{{ data.dataHoraPedido.format('d/m/Y H:i:s') }}</td>
+        </tr>
+        <tr>
+            <th>Data entrega</th>
+            <td>{{ data.dataHoraEntrega.format('d/m/Y H:i:s') }}</td>
+        </tr>
+
+        <tr>
             <th>Tempo de entrega</th>
-            <td>{{ data.tempoEntrega }}</td>
+            <td>{{ data.tempoEntrega }} - <a href="#"><span class="glyphicon glyphicon-map-marker"></span> Ver rota</td>
         </tr>
         <tr>
             <th>Valor do pedido</th>

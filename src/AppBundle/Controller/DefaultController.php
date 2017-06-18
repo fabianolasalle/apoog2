@@ -57,16 +57,22 @@ class DefaultController extends Controller
         $enderecoRepository->filterManager = $filterManager;
 
         $enderecos = $enderecoRepository->getLatitudeLongitudeWithFilter($weightColumn);
+        $hasData = false;
 
-        // Trata os endereços
-        foreach ($enderecos as &$endereco) {
-            $dateInterval = $endereco["dataHoraEntrega"]->diff($endereco["dataHoraPedido"]);
-            $endereco["tempoEntrega"] = $dateInterval->format("%H:%i:%s");
-            $endereco["infoWindow"] = $this->get("twig")->render("default/infowindow.html.twig", array("data" => $endereco));
+        if (count($enderecos) > 0) {
+            // Trata os endereços
+            foreach ($enderecos as &$endereco) {
+                $dateInterval = $endereco["dataHoraEntrega"]->diff($endereco["dataHoraPedido"]);
+                $endereco["tempoEntrega"] = $dateInterval->format("%H:%I:%S");
+                $endereco["infoWindow"] = $this->get("twig")->render("default/infowindow.html.twig", array("data" => $endereco));
+            }
+            $hasData = true;
         }
 
         return $this->render("default/map.html.twig", [
-            "points" => $enderecos
+            "points" => $enderecos,
+            "hasData" => $hasData,
+            "filters"   => $filterManager->getFilters()
         ]);
     }
 
@@ -75,15 +81,15 @@ class DefaultController extends Controller
         $filterManager = new FilterManager();
         foreach ($request->request as $field => $value) {
             if ($field == "items") {
-                $filterManager->addFilter(new Filter("item", "i.id in", $value));
+                $filterManager->addFilter(new Filter("item", "i.id in", $value, "Itens"));
             }
 
             if ($field == "periodoInicio") {
-                $filterManager->addFilter(new Filter("periodoinico", "p.dataHoraEntrega >=", $value));
+                $filterManager->addFilter(new Filter("periodoinico", "p.dataHoraEntrega >=", $value, "Início do período de entrega"));
             }
 
             if ($field == "periodoFim") {
-                $filterManager->addFilter(new Filter("periodofim", "p.dataHoraEntrega <=", $value));
+                $filterManager->addFilter(new Filter("periodofim", "p.dataHoraEntrega <=", $value, "Fim do período de entrega"));
             }
         }
 

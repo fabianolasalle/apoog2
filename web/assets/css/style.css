@@ -35,3 +35,24 @@
 	right: 105px;
 	top: 0;
 }
+
+.floating-message {
+	position: absolute;
+}
+
+.no-data-message {
+	top: 10px;
+	left: 0;
+	right: 0;
+	margin: auto;
+	width: 400px;
+}
+
+.filter-data {
+    top: auto;
+    bottom: 10px;
+    background: white;
+    border-radius: 3px;
+    padding: 3px 7px;
+    left: 15px;
+}

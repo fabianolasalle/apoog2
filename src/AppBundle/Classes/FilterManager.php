@@ -46,9 +46,8 @@ class FilterManager
         return $query;
     }
 
-    // TODO
-    public function applyFilter($query, $filterName)
+    public function getFilters()
     {
-
+        return $this->filters;
     }
 }
