@@ -35,3 +35,12 @@
 	right: 105px;
 	top: 0;
 }
+
+.floating-message {
+	position: absolute;
+	top: 10px;
+	left: 0;
+	right: 0;
+	margin: auto;
+	width: 400px;
+}

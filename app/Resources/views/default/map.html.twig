@@ -18,6 +18,15 @@
             </div>
         </div>
     </div>
+
+    {% if hasData == false %}
+        <div class="floating-message">
+            <p class="alert alert-warning text-center">
+                <span class="glyphicon glyphicon-alert"></span> 
+                Não foram encontrados pontos para a busca realizada.
+            </p>
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block javascripts %}
@@ -29,41 +38,44 @@
         var infoWindowManager;
 
         function initMap() {
-            infoWindowManager = new google.maps.InfoWindow({
-                disableAutoPan: true
-            });
+            // Previne erros de JS quando não há coordenadas.
+            if (coordinates.length > 0){
+                infoWindowManager = new google.maps.InfoWindow({
+                    disableAutoPan: true
+                });
 
-            map = new google.maps.Map(document.getElementById('map'), {
-                center: {lat: -27.6102281, lng: -48.6250075},
-                zoom: 11
-            });
+                map = new google.maps.Map(document.getElementById('map'), {
+                    center: {lat: -27.6102281, lng: -48.6250075},
+                    zoom: 11
+                });
 
-            google.maps.event.addListener(map, 'idle', function(){
-                if ($(".toggle-heatmap").hasClass("active")) {
-                    if (heatmap){
-                        heatmap.setMap(null);
-                    }
+                google.maps.event.addListener(map, 'idle', function(){
+                    if ($(".toggle-heatmap").hasClass("active")) {
+                        if (heatmap){
+                            heatmap.setMap(null);
+                        }
 
-                    // Remove os markers já plotados
-                    if (markers.length > 0) {
-                        $.each(markers, function(index, marker){
-                            marker.setMap(null);
+                        // Remove os markers já plotados
+                        if (markers.length > 0) {
+                            $.each(markers, function(index, marker){
+                                marker.setMap(null);
+                            });
+                        }
+                        
+                        heatmap = new google.maps.visualization.HeatmapLayer({
+                            data: getPoints(),
+                            radius: 20,
+                            map: map
                         });
-                    }
-                    
-                    heatmap = new google.maps.visualization.HeatmapLayer({
-                        data: getPoints(),
-                        radius: 20,
-                        map: map
-                    });
 
-                    if ($(".toggle-marker").hasClass("active")) {
-                         $.each(markers, function(index, marker){
-                            marker.setMap(map);
-                        });   
-                    }
-                };
-            });
+                        if ($(".toggle-marker").hasClass("active")) {
+                             $.each(markers, function(index, marker){
+                                marker.setMap(map);
+                            });   
+                        }
+                    };
+                });
+            }
         }
 
         function getPoints() {
@@ -129,7 +141,7 @@
             var higher = googleLatLongPrepare[0].weight;
 
             $.each(googleLatLongPrepare, function(index, value){
-                value.weight = value.weight / higher;\
+                value.weight = value.weight / higher;
                 googleLatLong.push(value);
             });
             

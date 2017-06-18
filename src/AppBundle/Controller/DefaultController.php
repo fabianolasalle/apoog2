@@ -57,16 +57,22 @@ class DefaultController extends Controller
         $enderecoRepository->filterManager = $filterManager;
 
         $enderecos = $enderecoRepository->getLatitudeLongitudeWithFilter($weightColumn);
+        $hasData = false;
 
-        // Trata os endereços
-        foreach ($enderecos as &$endereco) {
-            $dateInterval = $endereco["dataHoraEntrega"]->diff($endereco["dataHoraPedido"]);
-            $endereco["tempoEntrega"] = $dateInterval->format("%H:%I:%S");
-            $endereco["infoWindow"] = $this->get("twig")->render("default/infowindow.html.twig", array("data" => $endereco));
+        if (count($enderecos) > 0) {
+            // Trata os endereços
+            foreach ($enderecos as &$endereco) {
+                $dateInterval = $endereco["dataHoraEntrega"]->diff($endereco["dataHoraPedido"]);
+                $endereco["tempoEntrega"] = $dateInterval->format("%H:%I:%S");
+                $endereco["infoWindow"] = $this->get("twig")->render("default/infowindow.html.twig", array("data" => $endereco));
+            }
+            $hasData = true;
         }
 
+
         return $this->render("default/map.html.twig", [
-            "points" => $enderecos
+            "points" => $enderecos,
+            "hasData" => $hasData
         ]);
     }
 
