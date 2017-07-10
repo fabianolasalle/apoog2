@@ -85,7 +85,8 @@
                         heatmap = new google.maps.visualization.HeatmapLayer({
                             data: getPoints(),
                             radius: 20,
-                            map: map
+                            map: map,
+                            opacity: .7
                         });
 
                         if ($(".toggle-marker").hasClass("active")) {

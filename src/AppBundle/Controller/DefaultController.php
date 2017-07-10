@@ -87,11 +87,13 @@ class DefaultController extends Controller
             }
 
             if ($field == "periodoInicio") {
-                $filterManager->addFilter(new Filter("periodoinico", "p.dataHoraEntrega >=", $value, "Início do período de entrega"));
+                $value = \DateTime::createFromFormat('d/m/Y H:i', $value);
+                $filterManager->addFilter(new Filter("periodoinico", "p.dataHoraEntrega >=", $value->format("Y-m-d H:i"), "Início do período de entrega"));
             }
 
             if ($field == "periodoFim") {
-                $filterManager->addFilter(new Filter("periodofim", "p.dataHoraEntrega <=", $value, "Fim do período de entrega"));
+                $value = \DateTime::createFromFormat('d/m/Y H:i', $value);
+                $filterManager->addFilter(new Filter("periodofim", "p.dataHoraEntrega <=", $value->format("Y-m-d H:i"), "Fim do período de entrega"));
             }
 
             if ($field == "idadeInicio" && !empty($value)) {
